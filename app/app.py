@@ -112,8 +112,8 @@ def retrieveToken():
 	url = "https://api.telstra.com/v1/oauth/token"
 	headers = {'user-agent': 'kwieri/0.0.1'}
 	payload = {
-		'client_id': '<CLIENT_ID>',
-		'client_secret': '<CLIENT_SECRET>',
+		'client_id': 'CONSUMER_KEY',
+		'client_secret': 'CONSUMER_SECRET',
 		'grant_type': 'client_credentials',
 		'scope': 'WIFI'
 	}
@@ -137,18 +137,6 @@ def retrieveMarkers(lat, long, radius):
 	print(r.request.headers)
 	print(r.json())
 	return r.json()
-
-
-'''
-Health Check
-'''
-@app.route('/', methods = ['GET'])
-def api_root():
-	obj = {"health":"OK"}
-	resp = Response(json.dumps(obj), status=200, mimetype='application/json')
-	resp.headers['Server'] = 'kwieri'
-	resp.headers['Version'] = '0.0.1'
-	return resp
 
 
 '''
@@ -176,5 +164,3 @@ def api_markers():
 
 if __name__ == '__main__':
     app.run()
-    # app.run(host='0.0.0.0', port=int(5000))
-

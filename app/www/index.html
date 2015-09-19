@@ -4,20 +4,13 @@
 	    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
 	    <meta charset="utf-8">
 	    <title>Kwɪəri</title>
+
 	    <!-- Bootstrap -->
 	    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
 
-		<style>
-		html, body {
-			height: 100%;
-			margin: 0;
-			padding: 20px;
-		}
-		#map-canvas {
-			height: 350px;
-			width: 100%;
-		}
-		</style>
+	    <!-- kwieri -->
+	    <link href="css/kwieri.css" rel="stylesheet">
+
 	  </head>
 	  <body>
 
@@ -49,173 +42,12 @@
     	<!-- Google Maps script -->
         <script src="https://maps.googleapis.com/maps/api/js?callback=googleMaps.init" async defer></script>
 
-    	<!-- Custom script -->
+    	<!-- Custom scripts -->
+	    <script src="js/maps.js"></script>
+	    <script src="js/kwieri.js"></script>
+
 		<script type="text/javascript">
-
-		var googleMaps = {
-			map: 0,
-			focusRadius: null,
-        	markerIcon: "icon.png",
-			markers: [],
-		    /*
-		     * Default Map Center
-		     */
-		    myLatLng: {
-		    	lat: -37.818822, 
-		    	lng: 144.953949,
-		    	radius: 260
-		    },
-			// Sets the map on all markers in the array.
-			setMapOnAll: function(map) {'use strict';
-				for (var i = 0; i < googleMaps.markers.length; i++) {
-					googleMaps.markers[i].setMap(map);
-				}
-			},
-			// Removes the markers from the map, but keeps them in the array.
-			clearMarkers: function() {'use strict';
-				googleMaps.setMapOnAll(null);
-			},
-			// Deletes all markers in the array by removing references to them.
-			deleteMarkers: function() {'use strict';
-				googleMaps.clearMarkers();
-				googleMaps.markers = [];
-			},
-			// Deletes all markers in the array by removing references to them.
-			setRadius: function() {'use strict';
-				googleMaps.focusRadius = new google.maps.Circle({
-					strokeColor: '#FF0000',
-					strokeOpacity: 0.8,
-					strokeWeight: 2,
-					fillColor: '#FF0000',
-					fillOpacity: 0.15,
-					map: googleMaps.map,
-					draggable: true,
-					center: googleMaps.myLatLng,
-						radius: googleMaps.myLatLng['radius']
-				});
-
-				googleMaps.focusRadius.addListener('dragend', function() {
-		        	googleMaps.deleteMarkers();
-		            googleMaps.myLatLng['lat'] = googleMaps.focusRadius.getCenter().lat();
-		            googleMaps.myLatLng['lng'] = googleMaps.focusRadius.getCenter().lng();
-		            kwɪəri.retrieveWifiMarkers();					
-				});
-			},
-		    /*
-		     * creates a marker for the map and returns it
-		     * by default, the marker does NOT show on the map
-		     */
-		    setMarker: function(name, number, lat, lng) {'use strict';
-		        var image, size, marker;
-		        size = Math.round(Math.pow(2,googleMaps.map.getZoom()/2.9));
-		        image = {
-		            url: googleMaps.markerIcon,
-		            size: new google.maps.Size(size, size), //size
-		            scaledSize: new google.maps.Size(size, size) // scaled size (required for Retina display icon)
-		        };
-		        if (typeof number === null) {
-		            marker = new google.maps.Marker({
-		                position: new google.maps.LatLng(lat,lng),
-		                map: googleMaps.map,
-		                draggable: true,
-		                title: name,
-		                icon: image
-		            });
-		        } else {
-		            marker = new google.maps.Marker({
-		                position: new google.maps.LatLng(lat,lng),
-		                map: googleMaps.map,
-		                draggable: true,
-		                title: name,
-		                number: number,
-		                icon: image
-		            });
-		        }
-		        marker.setDraggable(false);
-		        $('#map-canvas div.gmnoprint[alarm="true"]').css({
-		            "border-radius" : size + "px",
-		        });;
-		        return marker;
-		    },
-		    /*
-		     * creates the google map
-		     */
-		    init: function() {'use strict';
-		        var element, options;
-		        element = $('#map-canvas')[0];
-		        options = {
-		            center: googleMaps.myLatLng,
-		            zoom: 15,
-		            mapTypeId: google.maps.MapTypeId.ROADMAP
-		        };
-
-		        googleMaps.map = new google.maps.Map(element, options);
-
-		        // update map when window is resized
-		        google.maps.event.trigger(googleMaps.map, 'resize');
-
-		        google.maps.event.addListener(googleMaps.map, 'click', function(event) {
-		        	googleMaps.deleteMarkers();
-		            googleMaps.myLatLng['lat'] = event.latLng.lat();
-		            googleMaps.myLatLng['lng'] = event.latLng.lng();
-		        	googleMaps.focusRadius.setMap(null);
-		        	googleMaps.setRadius();
-		            kwɪəri.retrieveWifiMarkers();
-		        });
-
-		        // set initial radius, this is draggable
-		        googleMaps.setRadius();
-		    }
-		};
-
-	    var kwɪəri = {
-		    /*
-		     * Retrieve markers from local API
-		     */
-		    retrieveWifiMarkers: function() {'use strict';
-		        var url = "http://localhost:5000/markers", 
-				headers = {}, 
-		        data = {
-		            "lat": googleMaps.myLatLng['lat'],
-		            "long": googleMaps.myLatLng['lng'],
-		            "radius": googleMaps.myLatLng['radius']
-		        };
-		        $.ajax({
-		            url: url,
-		            method: 'GET',
-		            headers: headers,
-		            contentType: 'application/json',
-		            dataType: 'json',
-		            data: data,
-		            success: function(data, status, jqXHR) {
-		            	// Clear existing results
-	                	$('#results').replaceWith('<div id="results"></div>');		                	
-		                for (var i = 0; i < data.length; i ++) {
-		                	// Update results div with new address
-		                	$('#results').append('<span style="font-weight: bold;font-size:large;">'+(i+1)+')</span> '+data[i]['address']+' ');
-		                	// Add markers to map
-            				googleMaps.markers[i] = googleMaps.setMarker(data[i]['address'], i, data[i]['lat'], data[i]['long']);
-		                }
-		            },
-		            error: function(jqXHR, status, error) {
-		                console.log(status + ", " + error);
-		                console.log(jqXHR);
-		            },
-		            complete: function() {
-		            },
-		            timeout: 30000
-		        });
-		    },
-		    /*
-		     * Initialise list of markers
-		     */
-		    init: function() {'use strict';
-				kwɪəri.retrieveWifiMarkers();
-		    }		    
-    	};
-
-		kwɪəri.init();
-
+			kwɪəri.init();
 		</script>
 
 	  </body>
