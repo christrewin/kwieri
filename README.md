@@ -1,5 +1,9 @@
 # kwɪəri
 
+# Reference App
+
+![Alt text](/app/app.png?raw=true "kwɪəri")
+
 # Build
 
 `docker build -t kwieri ./kwieri`
@@ -55,7 +59,3 @@ curl -X "GET" "http://localhost:5550/markers?lat=-37.818822&long=144.953949&radi
   }
 ]
 ```
-
-# Reference App
-
-![Alt text](/app/app.png?raw=true "kwɪəri")
