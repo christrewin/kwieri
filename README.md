@@ -40,7 +40,7 @@ Note: be sure to set the `var url = "http://localhost:5000/markers"` to your own
 
 # Deploy
 
-`docker run -d -v $HOME/docker/kwieri/app/www:/app/www -v $HOME/docker/k1:/var/log/apache2 -v $HOME/docker/kwieri/k1:/app/kwieri --name kwieri1 -p 80:80 -p 5000:5000 -i -t kwieri`
+`docker run -d --name kwieri -p 80:80 -p 5000:5000 -i -t kwieri`
 
 # API
 
