@@ -4,6 +4,27 @@
 
 ![Alt text](/app/app.png?raw=true "kwɪəri")
 
+# Summary
+
+This app consists of two main parts.
+
+1) A Python app serving client requests for Wifi Location & protecting API keys & secrets
+
+Main bit: The markers route is the part that calls the Telstra WiFi API and returns a JSON object of markers. Returns empty if none. Requires OAuth token so be sure to set your client id and secret.
+
+```
+@app.route('/markers', methods = ['GET', 'OPTIONS'])
+```
+
+2) A Web App making requests for WiFi Locations when the lense is moved or a new location is specified (click)
+
+Main bit: On load the kwɪəri object is initialised and a default location is used to set markers. In the processes `kwɪəri.retrieveWifiMarkers()` is fired making an ajax call to the python API.
+
+```
+retrieveWifiMarkers: function() {'use strict';
+		        var url = "http://localhost:5550/markers", 
+```
+
 # Build
 
 `docker build -t kwieri ./kwieri`
