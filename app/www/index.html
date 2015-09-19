@@ -55,7 +55,7 @@
 		var googleMaps = {
 			map: 0,
 			focusRadius: null,
-        	markerIcon: "http://crowdsupport.telstra.com.au/html/assets/map_poi_wifi-2x.png",
+        	markerIcon: "icon.png",
 			markers: [],
 		    /*
 		     * Default Map Center
@@ -170,83 +170,10 @@
 
 	    var kwɪəri = {
 		    /*
-		     * Default auth token
-		     */
-		    authToken: 0,
-		    /*
-		     * Authentication example but not recommended as client key and secret
-		     * would be stored in the js and can easily be harvested
-		     */
-		    retrieveAuthToken: function() {'use strict';
-		        var url = 'https://api.telstra.com/v1/oauth/token',
-				headers = {}, 
-		        data = {
-		            "client_id": "<CLIENT_ID>",
-		            "client_secret": "<CLIENT_SECRET>",
-		            "grant_type": "client_credentials",
-		            "scope": "WIFI"
-		        };
-		        $.ajax({
-		            url: url,
-		            method: 'GET',
-		            headers: headers,
-		            contentType: 'application/json',
-		            data:  data,
-		            dataType: 'json',
-		            success: function(data, status, jqXHR) {
-		                console.log(status + ", " + JSON.stringify(data));
-		                kwɪəri.authToken = data["access_token"];
-		                console.log(kwɪəri.authToken);
-		                kwɪəri.retrieveWifiLoc();
-		            },
-		            error: function(jqXHR, status, error) {
-		                console.log(status + ", " + error);
-		                console.log(jqXHR);
-		            },
-		            complete: function() {
-		            },
-		            timeout: 30000
-		        });
-		    },
-		    /*
-		     * Old code which throws 401 & reeking of CORS issues
-		     * Wrote a python flask API to serve the markers
-		     * Which is a better option as you can protect your secrets
-		     */		    
-		    retrieveWifiLoc: function() {'use strict';
-		        var url = "https://api.telstra.com/v1/wifi/hotspots", 
-				headers = { 
-		            "Authorization": "Bearer "+kwɪəri.authToken+""
-		        }, 
-		        data = {
-		            "lat": "-37.818496",
-		            "long": "144.953240",
-		            "radius": 100
-		        };
-		        $.ajax({
-		            url: url,
-		            method: 'GET',
-		            headers: headers,
-		            contentType: 'application/json',
-		            dataType: 'json',
-		            data: data,
-		            success: function(data, status, jqXHR) {
-		                console.log(status + ", " + JSON.stringify(data));
-		            },
-		            error: function(jqXHR, status, error) {
-		                console.log(status + ", " + error);
-		                console.log(jqXHR);
-		            },
-		            complete: function() {
-		            },
-		            timeout: 30000
-		        });
-		    },
-		    /*
 		     * Retrieve markers from local API
 		     */
 		    retrieveWifiMarkers: function() {'use strict';
-		        var url = "http://kwieri.tsgroup.io:5550/markers", 
+		        var url = "http://PYTHON_API_FQDN:5550/markers", 
 				headers = {}, 
 		        data = {
 		            "lat": googleMaps.myLatLng['lat'],
