@@ -22,7 +22,7 @@ Main bit: On load the kwɪəri object is initialised and a default location is u
 
 ```
 retrieveWifiMarkers: function() {'use strict';
-		        var url = "http://localhost:5550/markers", 
+		        var url = "http://localhost:5000/markers", 
 ```
 
 # Build
@@ -31,12 +31,12 @@ retrieveWifiMarkers: function() {'use strict';
 
 # Deploy
 
-`docker run -d -v $HOME/docker/kwieri/app/www:/app/www -v $HOME/docker/k1:/var/log/apache2 -v $HOME/docker/kwieri/k1:/app/kwieri --name kwieri1 -p 8091:80 -p 5551:5000 -i -t kwieri`
+`docker run -d -v $HOME/docker/kwieri/app/www:/app/www -v $HOME/docker/k1:/var/log/apache2 -v $HOME/docker/kwieri/k1:/app/kwieri --name kwieri1 -p 80:80 -p 5000:5000 -i -t kwieri`
 
 # API
 
 ```
-curl -X "GET" "http://localhost:5550/markers?lat=-37.818822&long=144.953949&radius=100" \
+curl -X "GET" "http://localhost:5000/markers?lat=-37.818822&long=144.953949&radius=100" \
 	-H "Content-Type: application/json" \
 	-H "Accept: application/json"
 ```
