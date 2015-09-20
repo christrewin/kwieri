@@ -123,7 +123,6 @@ def retrieveToken():
 
 def retrieveMarkers(lat, long, radius):
 	access_token = retrieveToken()['access_token']
-	print(access_token)
 	url = "https://api.telstra.com/v1/wifi/hotspots"
 	headers = {
 		'user-agent': 'kwieri/0.0.1'
@@ -134,8 +133,6 @@ def retrieveMarkers(lat, long, radius):
 		'radius': radius
 	}
 	r = requests.get(url, params=payload, auth=OAuth(access_token))
-	print(r.request.headers)
-	print(r.json())
 	return r.json()
 
 
