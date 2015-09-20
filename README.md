@@ -1,7 +1,5 @@
 # kwɪəri
 
-![Alt text](/app/app.png?raw=true "kwɪəri")
-
 # Summary
 
 This reference app consists of two main parts.
@@ -18,6 +16,26 @@ Requires authorisation so be sure to set your `CONSUMER_KEY` and `CONSUMER_SECRE
 2) Web App using Google Maps APIs and Flask API (Python App) to present Wifi Locations on a map.
 
 Be sure to set the `var url = "http://localhost:5000/markers"` to your own server within the `/app/www/js/kwieri.js` script.
+
+![Alt text](/app/app.png?raw=true "kwɪəri")
+
+# Prerequisite
+
+Docker on Mac
+
+```
+docker-machine run default
+docker-machine env default
+eval "$(docker-machine env default)"
+```
+
+Docker on Ubuntu
+
+```
+sudo apt-get update && sudo apt-get install -y git curl wget build-essential
+curl -sSL https://get.docker.com/ | sh
+sudo usermod -aG docker ubuntu
+```
 
 # Build
 
