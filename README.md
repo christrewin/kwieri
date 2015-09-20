@@ -1,38 +1,23 @@
 # kwɪəri
 
-# Reference App
-
 ![Alt text](/app/app.png?raw=true "kwɪəri")
 
 # Summary
 
-This app consists of two main parts.
+Web app consists of two main parts.
 
-1) A Python app serving client requests for Wifi Location & protecting API keys & secrets
+1) Python app server, calls Telstra WiFi Location API & protects consumer key & secret
 
-Main bit: The markers route is the part that calls the Telstra WiFi API and returns a JSON object of markers.
-
-```
-@app.route('/markers', methods = ['GET', 'OPTIONS'])
-```
-
-Note: Requires OAuth token so be sure to set your `CONSUMER_KEY` and `CONSUMER_SECRET` in the app.py script. 
+Requires authorisation so be sure to set your `CONSUMER_KEY` and `CONSUMER_SECRET` in the app.py script. 
 
 ```
 'client_id': 'CONSUMER_KEY',
 'client_secret': 'CONSUMER_SECRET',
 ```
 
-2) A Web App making requests for WiFi Locations when the lense is moved or a new location is specified (click)
+2) Web App using Google Maps APIs and Flask API (Python App) to present Wifi Locations on a map.
 
-Main bit: On load the kwɪəri object is initialised and a default location is used to set markers. In the processes `kwɪəri.retrieveWifiMarkers()` is fired making an ajax call to the python API.
-
-```
-retrieveWifiMarkers: function() {'use strict';
-    var url = "http://localhost:5000/markers", 
-```
-
-Note: be sure to set the `var url = "http://localhost:5000/markers"` to your own server within the `js/kwieri.js` script.
+Be sure to set the `var url = "http://localhost:5000/markers"` to your own server within the `js/kwieri.js` script.
 
 # Build
 
@@ -42,13 +27,17 @@ Note: be sure to set the `var url = "http://localhost:5000/markers"` to your own
 
 `docker run -d --name kwieri -p 80:80 -p 5000:5000 -i -t kwieri`
 
-# API
+# Python Flask API
+
+Request
 
 ```
 curl -X "GET" "http://localhost:5000/markers?lat=-37.818822&long=144.953949&radius=100" \
 	-H "Content-Type: application/json" \
 	-H "Accept: application/json"
 ```
+
+Response
 
 ```
 [
@@ -88,4 +77,45 @@ curl -X "GET" "http://localhost:5000/markers?lat=-37.818822&long=144.953949&radi
     "state": "vic"
   }
 ]
+```
+
+# Need more scale?
+
+HAProxy Load Balancer
+
+```
+frontend kwieri_app_fe
+    bind *:80
+    default_backend kwieri_app_be
+
+backend kwieri_app_be
+    balance leastconn
+    option httpclose
+    option forwardfor
+    server app1 kwieri_1:80
+    server app2 kwieri_2:80
+    server app3 kwieri_3:80
+    server app4 kwieri_4:80
+
+frontend kwieri_api_fe
+    bind *:5550
+    default_backend kwieri_api_be
+
+backend kwieri_api_be
+    balance leastconn
+    option httpclose
+    option forwardfor
+    server api1 kwieri_1:5551
+    server api2 kwieri_2:5552
+    server api3 kwieri_3:5553
+    server api4 kwieri_4:5554
+```
+
+Docker Containers
+
+```
+docker run -d --name kwieri_1 -p 8091:80 -p 5551:5000 -i -t kwieri
+docker run -d --name kwieri_2 -p 8092:80 -p 5552:5000 -i -t kwieri
+docker run -d --name kwieri_3 -p 8093:80 -p 5553:5000 -i -t kwieri
+docker run -d --name kwieri_4 -p 8094:80 -p 5554:5000 -i -t kwieri
 ```
