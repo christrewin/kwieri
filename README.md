@@ -4,11 +4,11 @@
 
 # Summary
 
-Web app consists of two main parts.
+This reference app consists of two main parts.
 
 1) Python app server, calls Telstra WiFi Location API & protects consumer key & secret
 
-Requires authorisation so be sure to set your `CONSUMER_KEY` and `CONSUMER_SECRET` in the app.py script. 
+Requires authorisation so be sure to set your `CONSUMER_KEY` and `CONSUMER_SECRET` in the `/app/app.py` script.
 
 ```
 'client_id': 'CONSUMER_KEY',
@@ -17,7 +17,7 @@ Requires authorisation so be sure to set your `CONSUMER_KEY` and `CONSUMER_SECRE
 
 2) Web App using Google Maps APIs and Flask API (Python App) to present Wifi Locations on a map.
 
-Be sure to set the `var url = "http://localhost:5000/markers"` to your own server within the `js/kwieri.js` script.
+Be sure to set the `var url = "http://localhost:5000/markers"` to your own server within the `/app/www/js/kwieri.js` script.
 
 # Build
 
