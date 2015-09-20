@@ -6,7 +6,7 @@
 
 This reference app consists of two main parts.
 
-1) Python app server, calls Telstra WiFi Location API & protects consumer key & secret
+1) Python App (Flask API), handles Telstra WiFi Location requests & protects consumer key & secret, returns JSON object.
 
 Requires authorisation so be sure to set your `CONSUMER_KEY` and `CONSUMER_SECRET` in the `/app/app.py` script.
 
