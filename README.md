@@ -92,10 +92,10 @@ backend kwieri_app_be
     balance leastconn
     option httpclose
     option forwardfor
-    server app1 kwieri_1:80
-    server app2 kwieri_2:80
-    server app3 kwieri_3:80
-    server app4 kwieri_4:80
+    server app1 kwieri_1:8091
+    server app2 kwieri_2:8092
+    server app3 kwieri_3:8093
+    server app4 kwieri_4:8094
 
 frontend kwieri_api_fe
     bind *:5550
