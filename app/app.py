@@ -122,6 +122,11 @@ def retrieveToken():
 
 
 def retrieveMarkers(lat, long, radius):
+	'''
+	TODO: probably should use a cache like Redis for storing
+	tokens rather than rolling a new one for each time
+	clients request	for markers 
+	'''
 	access_token = retrieveToken()['access_token']
 	url = "https://api.telstra.com/v1/wifi/hotspots"
 	headers = {
